@@ -45,10 +45,12 @@ noteApp
       │  │  ├─ react.svg
       │  │  └─ vite.svg
       │  ├─ components
+      │  ├─ controller
       │  ├─ hooks
       │  ├─ index.css
       │  ├─ main.jsx
-      │  ├─ page
+      │  ├─ pages
+      │  ├─ services
       │  ├─ store
       │  └─ utils
       └─ vite.config.js
