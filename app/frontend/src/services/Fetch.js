@@ -22,8 +22,6 @@ export default async (url, options = {}) => {
         }
     }
 
-    console.log(RequestOptions)
-
     try {
         const res = await fetch(`${BASE_URL}${url}`,RequestOptions);
 
@@ -42,7 +40,6 @@ export default async (url, options = {}) => {
         }
     } catch (error) {
 
-        console.log(error)
         return {
             isOk : false,
             message : "Lỗi mạng",

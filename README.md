@@ -29,6 +29,7 @@ noteApp
    │     ├─ bcrypt.js
    │     └─ jwt.js
    └─ frontend
+      ├─ .env
       ├─ eslint.config.js
       ├─ index.html
       ├─ package-lock.json
@@ -41,18 +42,34 @@ noteApp
       │  ├─ App.css
       │  ├─ App.jsx
       │  ├─ assets
-      │  │  ├─ hero.png
-      │  │  ├─ react.svg
-      │  │  └─ vite.svg
+      │  │  └─ icon
+      │  │     ├─ eye-closed.svg
+      │  │     └─ eye-solid.svg
       │  ├─ components
-      │  ├─ controller
+      │  │  ├─ login
+      │  │  │  ├─ Login.jsx
+      │  │  │  └─ Login.scss
+      │  │  └─ register
+      │  │     ├─ Register.jsx
+      │  │     └─ Register.scss
       │  ├─ hooks
       │  ├─ index.css
       │  ├─ main.jsx
       │  ├─ pages
+      │  │  ├─ AuthPage.jsx
+      │  │  ├─ AuthPage.scss
+      │  │  ├─ NotePage.jsx
+      │  │  └─ NotePage.scss
+      │  ├─ routes
+      │  │  └─ ProtectedRoute.jsx
       │  ├─ services
+      │  │  ├─ authService.js
+      │  │  └─ Fetch.js
       │  ├─ store
-      │  └─ utils
+      │  │  └─ authStore.js
+      │  ├─ utils
+      │  └─ validate
+      │     └─ auth.validate.js
       └─ vite.config.js
 
 ```

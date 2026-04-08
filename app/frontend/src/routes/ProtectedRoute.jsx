@@ -7,6 +7,7 @@ export default function ProtectedRoute({ children }) {
     const token = authStore.getToken();
 
     if (!token) {
+        alert('Bạn chưa đăng nhập hoặc token hết hạn')
         return <Navigate to={"/auth"} replace/>
     }
   
