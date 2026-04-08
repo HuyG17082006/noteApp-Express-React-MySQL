@@ -1,7 +1,7 @@
 import noteService from "../service/noteService.js";
 
 export default {
-    getAll : async (req, res) => {
+    getAll: async (req, res) => {
         const userId = req.userId;
         const options = req.query;
 
@@ -18,14 +18,17 @@ export default {
         })
     },
 
-    addNote : async (req, res) => {
+    addNote: async (req, res) => {
         const userId = req.userId;
-        const note = req.body || {
-            title : '...',
-            description : '',
-        };
+        const { title = '', description = '' } = req.body || {}
 
-        const result = await noteService.addNote(userId, note);
+        const result = await noteService.addNote(
+            userId,
+            {
+                title,
+                description
+            }
+        );
         const { isOk, message } = result;
 
         if (!isOk) {
@@ -35,13 +38,13 @@ export default {
         return res.status(201).json({ message })
     },
 
-    deleteNote : async (req, res) => {
+    deleteNote: async (req, res) => {
         const userId = req.userId;
         const { id } = req.params;
 
         if (!id) {
             return res.status(400).json({
-                message : "Lỗi không tìm thấy ghi chú"
+                message: "Lỗi không tìm thấy ghi chú"
             })
         }
 
@@ -55,13 +58,13 @@ export default {
         return res.status(200).json({ message })
     },
 
-    restoreNote : async (req, res) => {
+    restoreNote: async (req, res) => {
         const userId = req.userId;
         const { id } = req.params;
-        
+
         if (!id) {
             return res.status(400).json({
-                message : "Lỗi không tìm thấy ghi chú"
+                message: "Lỗi không tìm thấy ghi chú"
             })
         }
 
@@ -75,13 +78,13 @@ export default {
         return res.status(200).json({ message })
     },
 
-    checkNote : async (req, res) => {
+    checkNote: async (req, res) => {
         const userId = req.userId;
         const { id } = req.params;
 
         if (!id) {
             return res.status(400).json({
-                message : "Lỗi không tìm thấy ghi chú"
+                message: "Lỗi không tìm thấy ghi chú"
             })
         }
 
@@ -98,15 +101,20 @@ export default {
         })
     },
 
-    updateNote : async (req, res) => {
+    updateNote: async (req, res) => {
         const userId = req.userId;
         const { id } = req.params;
-        const note = req.body || {
-            title : '',
-            description : ''
-        };
+        const { title = '', description = '' } = req.body || {}
 
-        const result = await noteService.updateNote(userId, id, note);
+        const result = await noteService.updateNote(
+            userId,
+            id,
+            {
+                title,
+                description
+            }
+        );
+
         const { isOk, message } = result;
 
         if (!isOk) {

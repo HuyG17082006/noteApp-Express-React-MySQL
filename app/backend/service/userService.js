@@ -45,14 +45,13 @@ export default {
 
         const user = await userRepo.getUserByUsername(username);
 
-        console.log(user)
         if (!user)
             return {
                 isOk : false,
                 message : 'Sai tên tài khoản hoặc mật khẩu'
             }
 
-        const hashPassword = user.hashPassword;
+        const { id, hashPassword, email } = user;
         const verify = await bcrypt.compare(password, hashPassword);
         if (!verify)
             return {
@@ -60,10 +59,10 @@ export default {
                 message : 'Sai tên tài khoản hoặc mật khẩu'
             }
         
-        const refreshToken = jwt.createRefreshToken(user.id);
-        const accessToken = jwt.createAccessToken(user.id);
+        const refreshToken = jwt.createRefreshToken(id);
+        const accessToken = jwt.createAccessToken(id);
 
-        const isTokenCreated = await tokenService.createToken(user.id, refreshToken);
+        const isTokenCreated = await tokenService.createToken(id, refreshToken);
         const { isOk, message} = isTokenCreated;
         
         if (!isOk)
@@ -79,8 +78,8 @@ export default {
                 accessToken,
                 refreshToken,
                 user : {
-                    id : user.id,
-                    username : user.username
+                    username : user.username,
+                    email
                 }
             }
         }

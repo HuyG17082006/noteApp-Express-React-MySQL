@@ -15,7 +15,7 @@ export default {
     },
 
     getUserByUsername : async (username) => {
-        const [result] = await database.promise().execute('SELECT id, hashPassword FROM users WHERE username = ? LIMIT 1', [username]);
+        const [result] = await database.promise().execute('SELECT id, hashPassword, email FROM users WHERE username = ? LIMIT 1', [username]);
 
         if (result.length > 0)
             return result[0];

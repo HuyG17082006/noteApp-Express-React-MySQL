@@ -6,10 +6,7 @@ const THREE_DAYS = 1000 * 60 * 60 * 24 * 3;
 
 export default {
     login: async (req, res) => {
-        const { username, password } = req.body || {
-            username : '',
-            password : ''
-        };
+        const { username = '', password = '' } = req.body || {};
 
         if (!username || !password) {
             return res.status(400).json({
@@ -42,11 +39,7 @@ export default {
     },
 
     register: async (req, res) => {
-        const { username, password, email } = req.body || {
-            username : '',
-            password : '',
-            email : ''
-        };
+        const { username = '', password = '', email = '' } = req.body || {};
 
         if (!username || !password || !email) {
             return res.status(400).json({
