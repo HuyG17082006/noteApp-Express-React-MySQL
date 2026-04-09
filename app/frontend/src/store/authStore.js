@@ -1,22 +1,13 @@
 let accessToken = null;
-let username = null;
-let email = null;
 
 export default {
-    setToken : (_accessToken) => {
-        accessToken = _accessToken
+    setToken : (token) => {
+        accessToken = token;
     },
 
-    setUser : (_username, _email) => {
-        username = _username;
-        email = _email;
-    },
+    getToken : () => accessToken,
 
-    logout : () => {
+    deleteToken : () => {
         accessToken = null;
-        username = null;
-        email = null;
-    },
-
-    getToken : () => accessToken
+    }
 }

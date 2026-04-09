@@ -3,6 +3,7 @@ import './Register.scss'
 
 import authService from '../../services/authService.js';
 import { validateRegister } from '../../validate/auth.validate.js';
+import { NotiContext } from '../../context/notiProvider/NotiProvider.jsx';
 
 import eyeOpenIcon from '../../assets/icon/eye-solid.svg';
 import eyeClosedIcon from '../../assets/icon/eye-closed.svg';
@@ -14,6 +15,8 @@ function Register({ NavigateToLogin }) {
     const [showPassword, setShowPassword] = useState(false);
 
     const [errors, setErrors] = useState({});
+
+    const { addNoti } = useContext(NotiContext);
 
     const [user, setUser] = useState({
         username: '',
@@ -43,12 +46,11 @@ function Register({ NavigateToLogin }) {
         const { isOk, message } = await authService.register(user);
 
         if (!isOk) {
-            alert(message);
+            addNoti(message, 'error');
             return;
         }
 
-        alert(message);
-        navigate('/notes');
+        addNoti(message, 'success');
 
     }
 
@@ -72,7 +74,7 @@ function Register({ NavigateToLogin }) {
                 </div>
 
                 <div className='input__group'>
-                    <label>Tên đăng nhập</label>
+                    <label>Email</label>
                     <input
                         name='email'
                         type="text"

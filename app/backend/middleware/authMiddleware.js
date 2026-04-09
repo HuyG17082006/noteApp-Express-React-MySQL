@@ -16,7 +16,8 @@ export default function authMiddleware(req, res, next) {
 
     if (!isOk) {
         return res.status(401).json({
-            message
+            message,
+            isAccessTokenExpired : true
         })
     }
 

@@ -13,24 +13,28 @@ function App() {
 
   return (
     <NotiProvider>
-      <BrowserRouter>
-        <Routes>
-          
-          <Route path='/' element={<Navigate to="/auth" replace />}/>
-          <Route path='/auth' element={<AuthPage/>}/>
 
-          <Route 
-            path='/notes' 
+      <BrowserRouter>
+
+        <Routes>
+
+          <Route path='/' element={<Navigate to="/auth" replace />} />
+          <Route path='/auth' element={<AuthPage />} />
+
+          <Route
+            path='/notes'
             element={
               <ProtectedRoute>
-                <NotePage/>
+                <NotePage />
               </ProtectedRoute>
             }
           />
 
-          <Route path='*' element={<Navigate to="/auth" replace />}/>
+          <Route path='*' element={<Navigate to="/auth" replace />} />
         </Routes>
+
       </BrowserRouter>
+
     </NotiProvider>
   )
 }

@@ -63,12 +63,12 @@ export default {
         const accessToken = jwt.createAccessToken(id);
 
         const isTokenCreated = await tokenService.createToken(id, refreshToken);
-        const { isOk, message} = isTokenCreated;
+        const { isOk, message : tokenMessage } = isTokenCreated;
         
         if (!isOk)
             return {
                 isOk,
-                message
+                tokenMessage
             }
 
         return {

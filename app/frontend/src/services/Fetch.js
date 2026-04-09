@@ -4,10 +4,10 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default async (url, options = {}) => {
 
-    const token = authStore.getToken();
+    let token = authStore.getToken();
 
     const header = {
-        "Content-type" : "application/json"
+        "Content-type": "application/json"
     };
 
     if (token) {
@@ -16,36 +16,73 @@ export default async (url, options = {}) => {
 
     const RequestOptions = {
         ...options,
-        headers : {
+        credentials: "include",
+        headers: {
             ...header,
             ...options.headers
         }
     }
 
     try {
-        const res = await fetch(`${BASE_URL}${url}`,RequestOptions);
+        let res = await fetch(`${BASE_URL}${url}`, RequestOptions);
 
-        const data = await res.json();
-     
-        if (!res.ok)
-            return {
-                isOk : false,
-                message : data.message || 'Lỗi khi gửi yêu cầu',
-                data : null
+        let data = await res.json();
+
+        if (!res.ok) {
+
+            if (data.isAccessTokenExpired) {
+
+                const refreshRes  = await fetch(`${BASE_URL}/auth/refresh`, {
+                    method: "POST",
+                    headers : {
+                        "Content-type": "application/json"
+                    },
+                    credentials: "include"
+                });
+
+                const refreshData = await refreshRes.json();
+
+                if (!refreshRes.ok) {
+                    authStore.deleteToken();
+                    return {
+                        isOk: false,
+                        message : refreshData.message
+                    }
+                }
+
+                authStore.setToken(refreshData.accessToken);
+
+                const newToken = authStore.getToken();
+
+                RequestOptions.headers["Authorization"] = `Bearer ${newToken}`
+
+                res = await fetch(`${BASE_URL}${url}`, RequestOptions);
+                
+                data = await res.json();
+
             }
-        
+            else {
+                return {
+                    isOk: false,
+                    message: data.message || 'Lỗi khi gửi yêu cầu',
+                    data: null
+                }
+            }
+        }
+
         return {
-            isOk : true,
+            isOk: true,
+            message: data.message,
             data
         }
+
     } catch (error) {
 
         return {
-            isOk : false,
-            message : "Lỗi mạng",
-            data : null
+            isOk: false,
+            message: "Lỗi mạng",
+            data: null
         }
     }
-
 }
 

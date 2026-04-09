@@ -78,6 +78,7 @@ export default {
 
         const newRefreshToken = jwt.createRefreshToken(userId);
         const newAccessToken = jwt.createAccessToken(userId);
+    
 
         const isCreatedToken = await tokenRepo.createToken({
             id : crypto.randomUUID(),
@@ -90,6 +91,7 @@ export default {
                 isOk : false,
                 message :  'Lỗi khi tạo token mới'
             }
+            
 
         return {
             isOk : true,

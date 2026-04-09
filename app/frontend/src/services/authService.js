@@ -1,4 +1,5 @@
 import Fetch from "./Fetch.js"
+import authStore from "../store/authStore.js";
 
 export default {
     login: async ({ username, password }) => {
@@ -18,15 +19,13 @@ export default {
                 message
             }
 
-        const { accessToken, user } = data;
+        const { accessToken } = data;
 
         authStore.setToken(accessToken);
-        authStore.setUser(user.username, user.email);
-
+            
         return {
             isOk: true,
-            message,
-            data
+            message
         };
     },
 
@@ -39,7 +38,7 @@ export default {
 
         const res = await Fetch('/auth/register', options);
 
-        const { isOk, message, data } = res;
+        const { isOk, message } = res;
 
         if (!isOk)
             return {
@@ -50,6 +49,28 @@ export default {
         return {
             isOk: true,
             message
+        };
+    },
+
+    refresh: async () => {
+        const options = {
+            method: "POST",
+        }
+
+        const res = await Fetch('/auth/refresh', options);
+
+        const { isOk, message, data } = res;
+
+        if (!isOk)
+            return {
+                isOk: false,
+                message
+            }
+
+        authStore.setToken(data);
+            
+        return {
+            isOk: true
         };
     }
 }

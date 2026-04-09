@@ -2,14 +2,16 @@ import React, { useState, useContext } from 'react'
 import { useNavigate } from 'react-router'
 import './Login.scss'
 
-import authStore from '../../store/authStore.js';
 import authService from '../../services/authService.js';
 import { validateLogin } from '../../validate/auth.validate.js';
-import { NotiContext } from '../../context/notiProvider/NotiProvider.jsx';
 import useLockAction from '../../hooks/useLockAction.js';
+
+import { NotiContext } from '../../context/notiProvider/NotiProvider.jsx';
 
 import eyeOpenIcon from '../../assets/icon/eye-solid.svg';
 import eyeClosedIcon from '../../assets/icon/eye-closed.svg';
+
+const DELAY_LOGIN_BUTTON = 1000;
 
 export default function Login({ NavigateToRegister }) {
 
@@ -18,6 +20,7 @@ export default function Login({ NavigateToRegister }) {
     const [errors, setErrors] = useState({});
 
     const { addNoti } = useContext(NotiContext);
+
 
     const [user, setUser] = useState({
         username : '',
@@ -53,16 +56,11 @@ export default function Login({ NavigateToRegister }) {
             return;
         }
 
-        const { user : userData, accessToken } = data;
-
-        authStore.setToken(accessToken);
-        authStore.setUser(userData.username, userData.email);
-
         addNoti(message, 'success');
         navigate('/notes');
     }
 
-    const { runFunc, isLocked } = useLockAction(() => login(user), 1000);
+    const { runFunc, isLocked } = useLockAction(() => login(user), DELAY_LOGIN_BUTTON);
 
 
     return (

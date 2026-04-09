@@ -9,7 +9,7 @@ export default {
 
     deleteToken : async (refreshToken, userId) => {
         const [result] = await database.promise().execute('DELETE FROM tokens WHERE refreshToken = ? AND userId = ? LIMIT 1', [refreshToken, userId])
-        return result.affectedRows > 0;
+        return true;
     },
 
     // findTokenByUserId : async (userId) => {

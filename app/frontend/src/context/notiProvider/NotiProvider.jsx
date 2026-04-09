@@ -15,11 +15,11 @@ export default function NotiProvider({ children }) {
         setNotifications(prev => [
             ...prev,
             {
-                id : Date.now(),
+                id: Date.now(),
                 message,
                 type,
-                createdAt : Date.now(),
-                duration : 3000
+                createdAt: Date.now(),
+                duration: 3000
             }
         ])
     }
@@ -28,7 +28,7 @@ export default function NotiProvider({ children }) {
         const interval = setInterval(() => {
             const now = Date.now();
 
-            setNotifications(prev => 
+            setNotifications(prev =>
                 prev.filter(n => now - n.createdAt < n.duration)
             )
         }, 500)
@@ -42,8 +42,8 @@ export default function NotiProvider({ children }) {
 
             <div className='noti-container'>
                 {
-                    notifications.map(({id, type, message, duration}) => (
-                        <Notification key={id} type={type} message={message} time={duration}/>
+                    notifications.map(({ id, type, message, duration }) => (
+                        <Notification key={id} type={type} message={message} time={duration} />
                     ))
                 }
             </div>
