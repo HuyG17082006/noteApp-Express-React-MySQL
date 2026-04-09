@@ -25,7 +25,31 @@ export default {
 
         return {
             isOk: true,
+            message,
             data
+        };
+    },
+
+    register: async ({ username, password, email }) => {
+
+        const options = {
+            method: "POST",
+            body: JSON.stringify({ username, password, email })
+        }
+
+        const res = await Fetch('/auth/register', options);
+
+        const { isOk, message, data } = res;
+
+        if (!isOk)
+            return {
+                isOk: false,
+                message
+            }
+
+        return {
+            isOk: true,
+            message
         };
     }
 }

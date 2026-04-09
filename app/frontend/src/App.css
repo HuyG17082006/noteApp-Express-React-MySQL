@@ -2,4 +2,5 @@ body {
     min-height: 100vh;
     display: grid;
     background-color: #f9fafb;
+    position: relative;
 }

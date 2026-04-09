@@ -1,0 +1,93 @@
+.Notification {
+    
+    max-width: 280px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #1e1e2f;
+    color: white;
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+
+    .Notification-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50px;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .Notification-message {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        padding-right: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        max-width: 100%;
+        width: 100%;
+
+        h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.8;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+
+            white-space: normal;
+        }
+    }
+
+    .time-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+
+        height: 4px;
+        width: 100%;
+
+        background: linear-gradient(90deg, #69cef3, #a98fe7, #ffb6c1);
+
+        animation: timeload linear forwards;
+    }
+}
+
+@keyframes flyup {
+    0% {
+        transform: translateX(40px);
+        opacity: 0;
+    }
+
+    30% {
+        transform: translateX(0px);
+        opacity: 1;
+    }
+
+    70% {
+        transform: translateX(0px);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(40px);
+        opacity: 0;
+    }
+}
+
+@keyframes timeload {
+    0% {
+        width: 0px;
+    }
+
+    100% {
+        width: 340px;
+    }
+}
