@@ -12,10 +12,14 @@ const {
 } = process.env;
 
 export default mysql.createPool({
-    database : DATABASE_NAME,
-    user : DATABASE_USERNAME,
-    password : DATABASE_PASSWORD,
-    port : DATABASE_PORT,
-    host : DATABASE_HOST,
-    connectionLimit : 10
+    host: DATABASE_HOST,
+    user: DATABASE_USERNAME,
+    password: DATABASE_PASSWORD,
+    database: DATABASE_NAME,
+    port: Number(DATABASE_PORT),
+    connectionLimit: 10,
+
+    ssl : {
+        rejectUnauthorized : false
+    }
 })
