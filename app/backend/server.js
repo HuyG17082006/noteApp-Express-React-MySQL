@@ -16,7 +16,7 @@ const { SERVER_PORT = 3000 } = process.env;
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:5173', 'https://note-app-express-react-my-sql.vercel.app'],
+    origin: ['http://localhost:3000', 'http://localhost:5173', 'https://note-app-express-react-my-sql.vercel.app', 'note-app-express-react-my-5gu1asi1w-huyg17082006s-projects.vercel.app'],
     credentials: true
 }));
 
