@@ -1,5 +1,7 @@
 import noteRepo from "../repository/noteRepo.js";
 
+import createResponse from "../utils/createResponse.js";
+
 export default {
     addNote: async (userId, note) => {
 
@@ -12,85 +14,103 @@ export default {
         const isNoteCreated = await noteRepo.createNote(userId, newNote);
 
         if (!isNoteCreated) {
-            return {
+            return createResponse({
                 isOk: false,
                 message: 'Tạo ghi chú không thành công'
-            }
+            });
         }
 
-        return {
+        return createResponse({
             isOk: true,
             message: 'Tạo ghi chú thành công',
-        }
+            data: {
+                ...newNote,
+                updated_at: Date.now(),
+                created_at: Date.now()
+            }
+        })
     },
 
-    deleteNote: async (userId, id) => {
+    moveNoteToTrash: async (userId, id) => {
+        const isMoved = await noteRepo.deleteNoteByUserIdAndId(userId, id);
 
-        const isNoteDeleted = await noteRepo.SoftDeleteByUserIdAndId(userId, id);
-
-        if (!isNoteDeleted) {
-            return {
+        if (!isMoved) {
+            return createResponse({
                 isOk: false,
-                message: 'Xóa ghi chú không thành công'
-            }
+                message: 'Không thể chuyển ghi chú vào thùng rác'
+            });
         }
 
-        return {
+        return createResponse({
             isOk: true,
-            message: 'Xóa ghi chú thành công',
+            message: 'Đã chuyển ghi chú vào thùng rác'
+        });
+    },
+
+    hardDelete: async (userId, id) => {
+        const isDeleted = await noteRepo.deleteNoteByUserIdAndId(userId, id, { hardDelete: true });
+
+        if (!isDeleted) {
+            return createResponse({
+                isOk: false,
+                message: 'Không thể xóa ghi chú này'
+            });
         }
+
+        return createResponse({
+            isOk: true,
+            message: 'Đã xóa ghi chú thành công'
+        });
     },
 
     restoreNote: async (userId, id) => {
 
-        const isNoteRestored = await noteRepo.restoreByUserIdAndId(userId, id);
+        const isRestored = await noteRepo.restoreByUserIdAndId(userId, id);
 
-        if (!isNoteRestored) {
-            return {
+        if (!isRestored) {
+            return createResponse({
                 isOk: false,
-                message: 'Lưu trữ lại ghi chú không thành công'
-            }
+                message: 'Khôi phục ghi chú không thành công'
+            });
         }
 
-        return {
+        return createResponse({
             isOk: true,
-            message: 'Lưu trữ lại ghi chú thành công',
-        }
+            message: 'Khôi phục ghi chú thành công'
+        });
     },
 
     checkNote: async (userId, id) => {
-
         const noteDetail = await noteRepo.getNoteDetailByUserIdAndId(userId, id);
 
         if (!noteDetail) {
-            return {
+            return createResponse({
                 isOk: false,
-                message: 'lỗi khi lấy thông tin của ghi chú'
-            }
+                message: 'Lỗi khi lấy thông tin ghi chú'
+            });
         }
 
-        return {
+        return createResponse({
             isOk: true,
-            message: 'lấy thông tin của ghi chú thành công',
+            message: 'Lấy thông tin ghi chú thành công',
             data: noteDetail
-        }
-
+        });
     },
 
     getAll: async (userId, options = {}) => {
 
-        let { 
-            sort = 'createdAt',
+        let {
+            sort = 'updated_at',
             order = 'desc',
             isPinned,
             page = 1,
-            limit = 10 
+            limit = 10
         } = options;
 
-        const validSortFields = ['created_at', 'title', 'isPinned'];
+        const validSortFields = ['updated_at', 'title', 'isPinned'];
         const validOrder = ['asc', 'desc'];
 
-        sort = validSortFields.includes(sort) ? sort : 'created_at';
+        sort = validSortFields.includes(sort) ? sort : 'updated_at';
         order = validOrder.includes(order) ? order : 'desc';
 
         if (isPinned === 'true') isPinned = true;
@@ -109,38 +129,93 @@ export default {
             offset
         });
 
-        return {
+        const total = await noteRepo.getNotesCount(userId, {
+            isPinned
+        })
+
+        return createResponse({
             isOk: true,
             message: 'Lấy danh sách ghi chú thành công',
             data: notes,
             pagination: {
-                page,
-                limit,
-                total : notes.length
+                page: pageNum,
+                limit: limitNum,
+                total
             }
-        };
+        });
     },
 
-    updateNote: async (userId, id, { title = '', description = '' }) => {
+    getDeletedNotes: async (userId, options = {}) => {
 
-        const newNote = {
-            id,
-            title,
-            description
-        }
+        let {
+            order = 'desc',
+            page = 1,
+            limit = 10
+        } = options;
 
-        const isNoteUpdated = await noteRepo.updateNoteByUserIdAndId(userId, newNote);
+        const validSortFields = ['title', 'isPinned'];
+        const validOrder = ['asc', 'desc'];
 
-        if (!isNoteUpdated) {
-            return {
-                isOk: false,
-                message: 'cập nhật ghi chú thất bại'
-            }
-        }
+        order = validOrder.includes(order) ? order : 'desc';
 
-        return {
+        const pageNum = parseInt(page) || 1;
+        const limitNum = parseInt(limit) || 10;
+        const offset = (pageNum - 1) * limitNum;
+
+        const deletedNotes = await noteRepo.getAllDeletedNotesByUserId(userId, {
+            order,
+            limit: limitNum,
+            offset
+        });
+
+        const total = await noteRepo.getNotesCount(userId, {
+            isDeleted: true
+        })
+
+        return createResponse({
             isOk: true,
-            message: 'cập nhật ghi chú thành công',
+            message: 'Lấy danh sách ghi chú thành công',
+            data: deletedNotes,
+            pagination: {
+                page: pageNum,
+                limit: limitNum,
+                total
+            }
+        });
+    },
+
+    updateNote: async (userId, id, data) => {
+        const isUpdated = await noteRepo.updateNoteByUserIdAndId(userId, id, data);
+
+        if (!isUpdated) {
+            return createResponse({
+                isOk: false,
+                message: 'Cập nhật ghi chú thất bại'
+            });
         }
+
+        return createResponse({
+            message: 'Cập nhật ghi chú thành công',
+            data: {
+                id,
+                ...data,
+                updated_at: Date.now()
+            }
+        });
+    },
+
+    hardDeleteAll : async (userId) => {
+
+        const isDeleted = await noteRepo.hardDeleteAllNotesByUserId(userId);
+
+        if (!isDeleted)
+            return createResponse({
+                isOk: false,
+                message: 'Dọn thùng rác thất bại'
+            });
+        
+        return createResponse({
+            message: 'Đã dọn sạch thùng rác',
+        });
     }
 }

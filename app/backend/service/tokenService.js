@@ -1,104 +1,95 @@
 import tokenRepo from "../repository/tokenRepo.js";
 import jwt from "../utils/jwt.js";
 
+import createResponse from "../utils/createResponse.js";
+
 export default {
-    createToken : async (userId, refreshToken) => {
+    createToken: async (userId, refreshToken) => {
         const newToken = {
-            id : crypto.randomUUID(),
+            id: crypto.randomUUID(),
             userId,
             refreshToken
         }
 
         const isCreatedToken = await tokenRepo.createToken(newToken);
-        
-        if (!isCreatedToken) 
-            return {
-                isOk : false,
-                message :  'Lỗi khi tạo token mới'
-            }
 
-        return {
-            isOk : true,
-        }
+        return createResponse({
+            isOk: isCreatedToken,
+            message: isCreatedToken ?
+                'Tạo token mới thành công'
+                :
+                'Lỗi khi tạo token mới'
+        })
     },
 
-    deleteToken : async (userId, refreshToken) => {
+    deleteToken: async (userId, refreshToken) => {
 
         const isDeletedToken = await tokenRepo.deleteToken(refreshToken, userId);
-        
-        if (!isDeletedToken) 
-            return {
-                isOk : false,
-                message :  'Lỗi khi xóa token'
-            }
 
-        return {
-            isOk : true,
-        }
+        return createResponse({
+            isOk: isDeletedToken,
+            message: isDeletedToken ?
+                'Xóa token thành công'
+                :
+                'Lỗi khi xóa token'
+        })
 
     },
 
-    checkToken : async (refreshToken) => {
-        
+    checkToken: async (refreshToken) => {
+
         const isTokenExisted = await tokenRepo.checkRefreshToken(refreshToken);
 
-        if (!isTokenExisted) 
-            return {
-                isOk : false,
-                message :  'token không hợp lệ hoặc đã hết hạn'
-            }
-
-        return {
-            isOk : true,
-        }
+        return createResponse({
+            isOk: isTokenExisted,
+            message: isTokenExisted ?
+                'Token không hợp lệ hoặc đã hết hạn'
+                :
+                'dữ liệu hợp lệ'
+        })
 
     },
 
-    refresh : async (refreshToken) => {
+    refresh: async (refreshToken) => {
 
         const isTokenValidOnWeb = jwt.verifyRefreshToken(refreshToken);
 
-        let { isOk, message, data } = isTokenValidOnWeb;
-        
-        if (!isOk)
-            return { 
-                isOk : false,
-                message 
-            }
+        if (!isTokenValidOnWeb.isOk)
+            return createResponse(isTokenValidOnWeb);
 
-        const { userId } = data;    
+        const { userId } = isTokenValidOnWeb.data;
 
         const isDeletedToken = await tokenRepo.deleteToken(refreshToken, userId);
-        
-        if (!isDeletedToken) 
-            return {
-                isOk : false,
-                message :  'token không hợp lệ hoặc đã hết hạn'
-            }    
+
+        if (!isDeletedToken)
+            return createResponse({
+                isOk: isDeletedToken,
+                message: 'token không hợp lệ hoặc đã hết hạn'
+            })
 
         const newRefreshToken = jwt.createRefreshToken(userId);
         const newAccessToken = jwt.createAccessToken(userId);
-    
 
-        const isCreatedToken = await tokenRepo.createToken({
-            id : crypto.randomUUID(),
+
+        const isRefreshSuccess = await tokenRepo.createToken({
+            id: crypto.randomUUID(),
             userId,
-            refreshToken : newRefreshToken
+            refreshToken: newRefreshToken
         });
-        
-        if (!isCreatedToken) 
-            return {
-                isOk : false,
-                message :  'Lỗi khi tạo token mới'
-            }
-            
 
-        return {
-            isOk : true,
-            data : {
-                newRefreshToken, 
-                newAccessToken
-            } 
-        }
+        return createResponse({
+            isOk: isRefreshSuccess,
+            message: isRefreshSuccess ?
+                'Refresh token thành công'
+                :
+                'Lỗi khi refresh token',
+            data: isRefreshSuccess ?
+                {
+                    newRefreshToken,
+                    newAccessToken
+                } 
+                :
+                null
+        })
     }
 }

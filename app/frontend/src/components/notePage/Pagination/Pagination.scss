@@ -1,0 +1,97 @@
+.pagi-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+
+    margin-top: 20px;
+    padding: 6px;
+
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(6px);
+
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+
+    button {
+        min-width: 36px;
+        height: 36px;
+
+        padding: 0 10px;
+
+        border-radius: 8px;
+        border: none;
+
+        background: transparent;
+        color: #475569;
+
+        font-size: 14px;
+        font-weight: 600;
+
+        cursor: pointer;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        transition: all 0.4s ease;
+
+        &:hover:not(:disabled) {
+            background: rgba(99, 102, 241, 0.1);
+            color: #1e293b;
+        }
+
+        &:active:not(:disabled) {
+            transform: scale(0.92);
+        }
+
+        &:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+    }
+
+    button.selected {
+        background: linear-gradient(135deg, #6366f1, #3b82f6);
+        color: #ffffff;
+
+        font-weight: 700;
+
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+
+        transform: translateY(-1px) scale(1.05);
+
+        animation: pagi-pop 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    button.selected:hover {
+        filter: brightness(1.05);
+    }
+}
+
+@keyframes pagi-pop {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.6;
+    }
+    60% {
+        transform: scale(1.08);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.05);
+    }
+}
+
+@media (max-width: 768px) {
+    .pagi-container {
+        gap: 4px;
+        padding: 4px;
+
+        button {
+            min-width: 32px;
+            height: 32px;
+            font-size: 13px;
+        }
+    }
+}

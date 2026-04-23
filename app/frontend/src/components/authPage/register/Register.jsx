@@ -1,58 +1,10 @@
 import React, { useState } from 'react'
 import './Register.scss'
 
-import authService from '../../services/authService.js';
-import { validateRegister } from '../../validate/auth.validate.js';
-import { NotiContext } from '../../context/notiProvider/NotiProvider.jsx';
+import eyeOpenIcon from '../../../assets/icon/eye-solid.svg';
+import eyeClosedIcon from '../../../assets/icon/eye-closed.svg';
 
-import eyeOpenIcon from '../../assets/icon/eye-solid.svg';
-import eyeClosedIcon from '../../assets/icon/eye-closed.svg';
-
-
-
-function Register({ NavigateToLogin }) {
-
-    const [showPassword, setShowPassword] = useState(false);
-
-    const [errors, setErrors] = useState({});
-
-    const { addNoti } = useContext(NotiContext);
-
-    const [user, setUser] = useState({
-        username: '',
-        password: '',
-        email: ''
-    })
-
-    const handleInput = (e) => {
-        setUser({
-            ...user,
-            [e.target.name] : e.target.value
-        })
-    }
-
-    const handleShowPassword = () => {
-        setShowPassword(!showPassword);
-    }
-
-    const register = async (user) => {
-        const { isValid, errors } = validateRegister(user);
-
-        if (!isValid) {
-            setErrors(errors);
-            return;
-        }
-
-        const { isOk, message } = await authService.register(user);
-
-        if (!isOk) {
-            addNoti(message, 'error');
-            return;
-        }
-
-        addNoti(message, 'success');
-
-    }
+function Register({ NavigateToLogin, handleInput, showPassword, handleShowPassword, errors, runFunc, isLocked }) {
 
     return (
         <div className='Register'>
@@ -105,7 +57,7 @@ function Register({ NavigateToLogin }) {
             </div>
 
             <div className='footer'>
-                <button onClick={() => register(user)}>Đăng ký</button>
+                <button onClick={runFunc} disabled={isLocked}>Đăng ký</button>
 
                 <span onClick={NavigateToLogin}>Đăng nhập</span>
             </div>

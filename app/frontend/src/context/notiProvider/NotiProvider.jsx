@@ -5,36 +5,31 @@ import { useEffect } from 'react';
 
 const NotiContext = createContext()
 
+import { NOTIFICATION_DURATION } from '../../utils/constant.js';
+
 import './NotiProvider.scss';
 
 export default function NotiProvider({ children }) {
 
     const [notifications, setNotifications] = useState([]);
 
-    const addNoti = (message, type = 'success') => {
+    const addNoti = (message, type = 'success', time = NOTIFICATION_DURATION) => {
+        const id = Date.now()
+
         setNotifications(prev => [
             ...prev,
             {
-                id: Date.now(),
+                id,
                 message,
                 type,
-                createdAt: Date.now(),
-                duration: 3000
+                time
             }
         ])
+
+        setTimeout(() => {
+            setNotifications(prev => prev.filter(n => n.id !== id));
+        }, time);
     }
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const now = Date.now();
-
-            setNotifications(prev =>
-                prev.filter(n => now - n.createdAt < n.duration)
-            )
-        }, 500)
-
-        return () => clearInterval(interval);
-    }, [])
 
     return (
         <NotiContext.Provider value={{ notifications, setNotifications, addNoti }}>
@@ -42,8 +37,8 @@ export default function NotiProvider({ children }) {
 
             <div className='noti-container'>
                 {
-                    notifications.map(({ id, type, message, duration }) => (
-                        <Notification key={id} type={type} message={message} time={duration} />
+                    notifications.map(({ id, type, message, time }) => (
+                        <Notification key={id} type={type} message={message} time={time} />
                     ))
                 }
             </div>

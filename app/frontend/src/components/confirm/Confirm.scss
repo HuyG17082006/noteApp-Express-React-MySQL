@@ -1,0 +1,129 @@
+.confirm-container {
+    width: 100%;
+    max-width: 380px;
+
+    background: #fff;
+    border-radius: 16px;
+    padding: 22px 20px;
+
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.18),
+        0 4px 10px rgba(0, 0, 0, 0.08);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    animation: modalPop 0.25s ease;
+
+    .icon {
+        width: 64px;
+        height: 64px;
+
+        border-radius: 50%;
+        background: rgba(239, 68, 68, 0.12);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        margin-bottom: 14px;
+
+        animation: pulse 1.5s infinite;
+
+        img {
+            width: 30px;
+            height: 30px;
+        }
+    }
+
+    .info-group {
+        h3 {
+            font-size: 19px;
+            margin-bottom: 8px;
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+    }
+
+    .button-group {
+        margin-top: 22px;
+
+        display: flex;
+        gap: 10px;
+        width: 100%;
+
+        button {
+            flex: 1;
+            padding: 10px 0;
+
+            border-radius: 10px;
+            border: none;
+
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+
+            transition: all 0.2s ease;
+        }
+
+        .cancel {
+            background: #f1f5f9;
+            color: #334155;
+
+            &:hover {
+                background: #e2e8f0;
+            }
+
+            &:active {
+                transform: scale(0.97);
+            }
+        }
+
+        .confirm {
+            background: #ef4444;
+            color: #fff;
+
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+
+            &:hover {
+                background: #dc2626;
+            }
+
+            &:active {
+                transform: scale(0.97);
+                box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3);
+            }
+        }
+    }
+}
+
+@keyframes modalPop {
+    0% {
+        transform: scale(0.92) translateY(10px);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

@@ -11,17 +11,18 @@ export default function ProtectedRoute({ children }) {
 
 	useEffect(() => {
 		const checkAuth = async () => {
-			
+
 			const token = authStore.getToken();
 
 			if (token) {
 				setIsAuth(true);
-				return;
+				return null;
 			}
 			
-			const { isOk } = await authService.refresh();
+			const { isOk, data } = await authService.refresh();
 
 			if (isOk) {
+				authStore.setToken(data.accessToken);
 				setIsAuth(true);
 			}
 			else
@@ -31,13 +32,12 @@ export default function ProtectedRoute({ children }) {
 	}, [])
 
 	if (isAuth === null)
-		return;
+		return null;
 
 	if (!isAuth) {
 		return <Navigate to="/auth" replace />;
 	}
 
-	return (
-		children
-	)
+	if (isAuth)
+		return children
 }

@@ -22,5 +22,6 @@ export default function authMiddleware(req, res, next) {
     }
 
     req.userId = data.userId;
+
     next();
 }

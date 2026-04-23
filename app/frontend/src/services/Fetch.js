@@ -24,17 +24,17 @@ export default async (url, options = {}) => {
     }
 
     try {
-        let res = await fetch(`${BASE_URL}${url}`, RequestOptions);
+        const res = await fetch(`${BASE_URL}${url}`, RequestOptions);
 
-        let data = await res.json();
+        const data = await res.json();
 
         if (!res.ok) {
 
-            if (data.isAccessTokenExpired) {
+            if (data?.isAccessTokenExpired) {
 
-                const refreshRes  = await fetch(`${BASE_URL}/auth/refresh`, {
+                const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, {
                     method: "POST",
-                    headers : {
+                    headers: {
                         "Content-type": "application/json"
                     },
                     credentials: "include"
@@ -46,34 +46,46 @@ export default async (url, options = {}) => {
                     authStore.deleteToken();
                     return {
                         isOk: false,
-                        message : refreshData.message
+                        message: refreshData.message
                     }
                 }
 
                 authStore.setToken(refreshData.accessToken);
 
-                const newToken = authStore.getToken();
+                const retryOptions = {
+                    ...options,
+                    credentials: "include",
+                    headers: {
+                        "Content-type": "application/json",
+                        Authorization: `Bearer ${refreshData.accessToken}`
+                    }
+                };
 
-                RequestOptions.headers["Authorization"] = `Bearer ${newToken}`
+                const reRes = await fetch(`${BASE_URL}${url}`, retryOptions);
 
-                res = await fetch(`${BASE_URL}${url}`, RequestOptions);
-                
-                data = await res.json();
+                // const reData = await reRes.json();
 
+                // console.log(reData)
+
+                // if (!reRes.ok)
+                //     return reData;
+
+                // return reData;
+
+                return await reRes.json();
             }
             else {
                 return {
-                    isOk: false,
-                    message: data.message || 'Lỗi khi gửi yêu cầu',
-                    data: null
+                    isOk : false,
+                    ...data,
+                    message : data.message || "Lỗi khi gửi yêu cầu"
                 }
             }
         }
 
         return {
-            isOk: true,
-            message: data.message,
-            data
+            isOk : true,
+            ...data
         }
 
     } catch (error) {

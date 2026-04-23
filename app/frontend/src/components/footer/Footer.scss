@@ -1,0 +1,164 @@
+.footer-container {
+    width: 100%;
+    margin-top: 30px;
+
+    display: flex;
+    justify-content: center;
+
+    padding: 20px 0;
+
+    border-top: 1px solid #e5e7eb;
+
+    background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0),
+        rgba(248,250,252,0.8)
+    );
+}
+
+.footer-inner {
+    width: 100%;
+    max-width: 1200px;
+
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+
+    align-items: center;
+
+    padding: 0 20px;
+}
+
+/* LEFT */
+.footer-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .logo-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #3b82f6);
+        }
+
+        .brand {
+            font-weight: 600;
+            color: #1e293b;
+        }
+    }
+
+    .sub {
+        font-size: 12px;
+        color: #94a3b8;
+    }
+}
+
+/* CENTER */
+.footer-center {
+    font-size: 13px;
+    color: #64748b;
+
+    display: flex;
+    gap: 6px;
+}
+
+/* RIGHT */
+.footer-links {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    .link {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        padding: 6px 10px;
+
+        border-radius: 10px;
+
+        text-decoration: none;
+
+        font-size: 13px;
+        font-weight: 500;
+
+        color: #475569;
+        background: #f1f5f9;
+
+        transition: all 0.2s ease;
+
+        svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        &:hover {
+            transform: translateY(-2px);
+        }
+    }
+
+    .facebook:hover {
+        background: rgba(59, 130, 246, 0.15);
+        color: #2563eb;
+    }
+
+    .github:hover {
+        background: rgba(15, 23, 42, 0.1);
+        color: #111827;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-inner {
+        display: flex;             
+        flex-direction: column;
+
+        align-items: center;
+        justify-content: center;
+
+        gap: 14px;
+
+        text-align: center;
+    }
+
+    .footer-left {
+        align-items: center;
+
+        .logo {
+            justify-content: center;
+        }
+
+        .sub {
+            font-size: 12px;
+        }
+    }
+
+    .footer-center {
+        justify-content: center;
+        font-size: 12px;
+    }
+
+    .footer-links {
+        justify-content: center;
+        width: 100%;
+
+        gap: 8px;
+
+        .link {
+            flex: 1;                
+            justify-content: center;
+
+            padding: 10px 0;         
+
+            border-radius: 12px;
+
+            font-size: 14px;
+        }
+    }
+}

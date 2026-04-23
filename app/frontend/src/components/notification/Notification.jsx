@@ -2,32 +2,12 @@ import React, { useContext } from 'react'
 
 import './Notification.scss'
 
+import { NOTIFICATION_CONFIG } from '../../utils/constant';
+
 export default function Notification({ type, message, time }) {
 
-    const config = {
-        "success": {
-            title: "Thành công",
-            background_color: 'rgba(110, 231, 183, 0.22)',
-            border_color: "#34d399",
-            icon: '/mark.png',
-            color: "#065f46"
-        },
-        "warning": {
-            title: "Cảnh báo",
-            background_color: "rgba(253, 224, 71, 0.22)",
-            icon: '/warning.png',
-            border_color: "#facc15",
-            color: "#78350f"
-        },
-        "error": {
-            title: "Lỗi",
-            background_color: "rgba(251, 113, 133, 0.22)",
-            icon: '/error.png',
-            color: "#7f1d1d"
-        }
-    }
 
-    let notiStyle = config[type.toLowerCase()];
+    let notiStyle = NOTIFICATION_CONFIG[type.toLowerCase()];
 
     return (
         (
@@ -36,7 +16,7 @@ export default function Notification({ type, message, time }) {
                 style={{
                     background: notiStyle.background_color,
                     border: `1px solid ${notiStyle.border_color}`,
-                    animation: `flyup ${time}ms ease forwards`
+                    animation: `flyup ${time}ms linear forwards`
                 }}
             >
                 <div
@@ -56,7 +36,9 @@ export default function Notification({ type, message, time }) {
 
                 <div
                     className='time-bar'
-                    style={{ animation: `timeload ${time}ms linear forwards` }}
+                    style={{
+                        animation: `timeload ${time}ms linear forwards`
+                    }}
                 />
             </div>
         )

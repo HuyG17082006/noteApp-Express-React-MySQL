@@ -3,7 +3,11 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router'
 
 import ProtectedRoute from './routes/ProtectedRoute.jsx'
 
+import AuthLayout from './Layout/AuthLayout.jsx'
+import MainLayout from './Layout/MainLayout.jsx'
+
 import NotiProvider from './context/notiProvider/NotiProvider.jsx'
+import ConfirmProvider from './context/confirmProvider/ConfirmProvider.jsx'
 import NotePage from './pages/NotePage.jsx'
 import AuthPage from './pages/AuthPage.jsx'
 
@@ -11,32 +15,45 @@ import './App.css'
 
 function App() {
 
-  return (
-    <NotiProvider>
+	return (
+		<NotiProvider>
 
-      <BrowserRouter>
+			<ConfirmProvider>
 
-        <Routes>
+				<BrowserRouter>
 
-          <Route path='/' element={<Navigate to="/auth" replace />} />
-          <Route path='/auth' element={<AuthPage />} />
+					<Routes>
 
-          <Route
-            path='/notes'
-            element={
-              <ProtectedRoute>
-                <NotePage />
-              </ProtectedRoute>
-            }
-          />
+						<Route path='/' element={<Navigate to="/auth" replace />} />
+						<Route
+							path='/auth'
+							element={
+								<AuthLayout>
+									<AuthPage />
+								</AuthLayout>
+							}
+						/>
 
-          <Route path='*' element={<Navigate to="/auth" replace />} />
-        </Routes>
+						<Route
+							path='/notes'
+							element={
+								<ProtectedRoute>
+									<MainLayout>
+										<NotePage />
+									</MainLayout>
+								</ProtectedRoute>
+							}
+						/>
 
-      </BrowserRouter>
+						<Route path='*' element={<Navigate to="/auth" replace />} />
+					</Routes>
 
-    </NotiProvider>
-  )
+				</BrowserRouter>
+
+			</ConfirmProvider>
+
+		</NotiProvider>
+	)
 }
 
 export default App

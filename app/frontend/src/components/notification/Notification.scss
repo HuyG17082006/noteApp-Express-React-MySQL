@@ -1,48 +1,57 @@
 .Notification {
-    
-    max-width: 280px;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 60px 1fr;
-    border-radius: 12px;
-    overflow: hidden;
-    background: #1e1e2f;
-    color: white;
+    position: relative;
 
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    max-width: 320px;
+    width: 100%;
+    min-width: 200px;
+
+    display: grid;
+    grid-template-columns: 56px 1fr;
+
+    border-radius: 14px;
+    overflow: hidden;
+
+    background: rgba(255, 255, 255, 0.85); /* nổi trên nền */
+    backdrop-filter: blur(10px);
+
+    border: 1px solid rgba(255, 255, 255, 0.6);
+
+    box-shadow:
+        0 12px 30px rgba(15, 23, 42, 0.18),
+        0 4px 12px rgba(0, 0, 0, 0.08);
+
+    animation: flyup 0.5s ease forwards;
 
     .Notification-icon {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 50px;
-        background: rgba(255, 255, 255, 0.1);
+
+        width: 56px;
+
+        background: rgba(59, 130, 246, 0.08); /* accent nhẹ */
     }
 
     .Notification-message {
-        padding-top: 12px;
-        padding-bottom: 12px;
-        padding-right: 16px;
+        padding: 14px 14px 16px 0;
+
         display: flex;
         flex-direction: column;
         gap: 4px;
-        max-width: 100%;
-        width: 100%;
 
         h3 {
             margin: 0;
-            font-size: 16px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
         }
 
         p {
             margin: 0;
-            font-size: 14px;
-            opacity: 0.8;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            word-break: break-word;
+            font-size: 13px;
+            color: #4b5563;
 
-            white-space: normal;
+            word-break: break-word;
         }
     }
 
@@ -51,43 +60,26 @@
         bottom: 0;
         left: 0;
 
-        height: 4px;
+        height: 3px;
         width: 100%;
 
-        background: linear-gradient(90deg, #69cef3, #a98fe7, #ffb6c1);
+        background: linear-gradient(90deg, #6366f1, #3b82f6);
 
-        animation: timeload linear forwards;
+        border-radius: 0 0 14px 14px;
     }
 }
 
-@keyframes flyup {
-    0% {
-        transform: translateX(40px);
-        opacity: 0;
-    }
+@keyframes flyup { 0% { transform: translateX(40px); opacity: 0; } 30% { transform: translateX(0px); opacity: 1; } 80% { transform: translateX(0px); opacity: 1; } 100% { transform: translateX(40px); opacity: 0; } }
 
-    30% {
-        transform: translateX(0px);
-        opacity: 1;
-    }
+@keyframes timeload { from { width: 0px; } to { width: 340px; } }
 
-    70% {
-        transform: translateX(0px);
-        opacity: 1;
-    }
+@media (max-width: 480px) {
+    .Notification {
+        max-width: 100%;
+        grid-template-columns: 48px 1fr;
 
-    100% {
-        transform: translateX(40px);
-        opacity: 0;
-    }
-}
-
-@keyframes timeload {
-    0% {
-        width: 0px;
-    }
-
-    100% {
-        width: 340px;
+        .Notification-icon {
+            width: 48px;
+        }
     }
 }

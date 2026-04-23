@@ -2,7 +2,19 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
+
     display: flex;
     flex-direction: column;
-    gap : 10px;
+    gap: 12px;
+
+    z-index: 9999;
+    
+    @media (max-width: 480px) {
+        left: 50%;
+        right: unset;
+        transform: translateX(-50%);
+        bottom: 16px;
+        width: calc(100% - 32px);
+        align-items: center;
+    }
 }

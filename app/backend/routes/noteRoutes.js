@@ -6,17 +6,23 @@ const noteRouter = express.Router();
 const { 
     addNote,
     restoreNote,
-    deleteNote,
+    moveNoteToTrash,
+    hardDelete,
     getAll,
     updateNote,
-    checkNote
+    checkNote,
+    getAllDeletedNotes,
+    hardDeleteAll
 } = noteController;
 
 noteRouter.get('/', getAll);
+noteRouter.get('/trash', getAllDeletedNotes);
 noteRouter.get('/:id', checkNote);
-noteRouter.post('', addNote);
+noteRouter.post('/', addNote);
 noteRouter.put('/:id', updateNote);
-noteRouter.delete('/:id', deleteNote);
+noteRouter.delete('/trash', hardDeleteAll);
+noteRouter.delete('/:id', moveNoteToTrash);
+noteRouter.delete('/:id/permanent', hardDelete);
 noteRouter.patch('/:id/restore', restoreNote);
 
 export default noteRouter;

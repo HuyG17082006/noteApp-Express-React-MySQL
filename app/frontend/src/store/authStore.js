@@ -1,13 +1,22 @@
-let accessToken = null;
+const CURRENT_USER_KEY = 'accessToken'
+
+let accessToken = localStorage.getItem(CURRENT_USER_KEY) || null;
+let isVerify = false;
 
 export default {
     setToken : (token) => {
-        accessToken = token;
+        localStorage.setItem(CURRENT_USER_KEY, token);
+        isVerify = true;
     },
 
-    getToken : () => accessToken,
+    getToken: () => localStorage.getItem(CURRENT_USER_KEY) || null,
 
-    deleteToken : () => {
+    deleteToken: () => {
         accessToken = null;
+        localStorage.removeItem(CURRENT_USER_KEY);
+    },
+
+    verify : () => {
+        return isVerify;
     }
 }

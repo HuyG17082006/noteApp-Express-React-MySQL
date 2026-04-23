@@ -2,26 +2,28 @@
 import tokenService from "../service/tokenService.js";
 import userService from "../service/userService.js";
 
+import sendRespone from "../utils/sendRespone.js";
+
 const THREE_DAYS = 1000 * 60 * 60 * 24 * 3;
 
 export default {
     login: async (req, res) => {
         const { username = '', password = '' } = req.body || {};
 
-        if (!username || !password) {
-            return res.status(400).json({
-                message: 'Thiếu username hoặc password'
-            });
-        }
+        if (!username || !password)
+            return sendRespone(res, {
+                    resStatus: 400,
+                    message: 'Thiếu username hoặc password'
+                })
 
         const result = await userService.login(username, password);
         const { isOk, message, data = null } = result;
 
-        if (!isOk) {
-            return res.status(401).json({
-                message: message
+        if (!isOk)
+            return sendRespone(res, {
+                resStatus : 401,
+                message
             })
-        }
 
         const { accessToken, refreshToken, user } = data;
 
@@ -31,49 +33,45 @@ export default {
             sameSite: 'strict'
         })
 
-        res.json({
-            accessToken: accessToken,
-            user: user,
-            message: message
-        });
+        return sendRespone(res, {
+            resStatus : 200,
+            message,
+            accessToken,
+            user
+        })
     },
 
     register: async (req, res) => {
         const { username = '', password = '', email = '' } = req.body || {};
 
-        if (!username || !password || !email) {
-            return res.status(400).json({
-                message: 'Thiếu username, password hoặc email'
-            });
-        }
+        if (!username || !password || !email)
+            return sendRespone(res, {
+                    resStatus: 401,
+                    message: 'Thiếu username, email hoặc password'
+                })
 
         const result = await userService.register(username, password, email);
-        const { isOk, message } = result;
-
-        if (!isOk) {
-            return res.status(400).json({
-                message: message
-            })
-        }
-
-        return res.status(201).json({
-            message: message
+        
+        return sendRespone(res, {
+            resStatus : result.isOk ? 200 : 400,
+            ...result
         })
     },
 
     refresh: async (req, res) => {
 
         const refreshToken = req.cookies?.refreshToken;
-        if (!refreshToken) {
-            return res.status(401).json({
-                message: 'Không có refresh token'
-            });
-        }
+        if (!refreshToken)
+            return sendRespone(res, {
+                    resStatus: 401,
+                    message: 'Không có refreshToken'
+                })
 
         const isTokenChanged = await tokenService.refresh(refreshToken);
         const { isOk, message, data } = isTokenChanged;
         if (!isOk)
-            return res.status(401).json({
+            return sendRespone(res, {
+                resStatus : 401,
                 message
             })
 
@@ -85,36 +83,36 @@ export default {
             sameSite: 'strict'
         })
 
-        return res.status(200).json({
-            accessToken: newAccessToken
-        })
+        return sendRespone(res, {
+                resStatus : 200,
+                accessToken : newAccessToken,
+                message
+            })
     },
 
     logout: async (req, res) => {
         const userId = req.userId || '';
         const refreshToken = req.cookies?.refreshToken;
 
-        if (!refreshToken) {
-            return res.status(400).json({
-                message: 'Không có refresh token'
-            });
-        }
+        if (!refreshToken) 
+            return sendRespone(res, {
+                resStatus : 401,
+                message: 'Không có refreshToken'
+            })
 
         const result = await tokenService.deleteToken(userId, refreshToken);
 
-        const { isOk, message } = result;
-
-        if (!isOk) {
-            return res.status(400).json({
-                message
+        if (!result.isOk) 
+            return sendRespone(res, {
+                resStatus : 400,
+                ...res
             })
-        }
 
         res.clearCookie('refreshToken');
 
-        return res.status(200).json({
-            message: 'Đăng xuất thành công'
-        });
-
+        return sendRespone(res, {
+                resStatus : 200,
+                message : 'Đăng xuất thành công'
+            })
     }
 }
