@@ -80,7 +80,8 @@ export default {
         res.cookie('refreshToken', newRefreshToken, {
             maxAge: THREE_DAYS,
             httpOnly: true,
-            sameSite: 'strict'
+            secure : true,
+            sameSite: 'none'
         })
 
         return sendRespone(res, {
