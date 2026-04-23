@@ -15,16 +15,16 @@ const DELAY_BUTTON_TIME = 1000;
 
 export default function AuthPage() {
 
-    const {
-        login,
-        register
-    } = useAuth();
-
     const [authDisplay, setAuthDisplay] = useState('login');
 
     const [showPassword, setShowPassword] = useState(false);
 
     const [errors, setErrors] = useState({});
+
+    const {
+        login,
+        register
+    } = useAuth({setErrors});
 
     const [user, setUser] = useState({
         username: '',
