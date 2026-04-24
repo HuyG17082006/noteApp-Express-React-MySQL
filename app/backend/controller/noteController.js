@@ -6,9 +6,9 @@ export default {
     getAll: async (req, res) => {
         const userId = req.userId;
         const options = req.query;
-        console.time('query')
+
         const result = await noteService.getAll(userId, options);
-        console.timeEnd('query')
+
         return sendRespone(res, {
             resStatus : result.isOk ? 200 : 400,
             ...result

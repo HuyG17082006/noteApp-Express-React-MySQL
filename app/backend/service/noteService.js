@@ -120,7 +120,7 @@ export default {
         const pageNum = parseInt(page) || 1;
         const limitNum = parseInt(limit) || 10;
         const offset = (pageNum - 1) * limitNum;
-
+        console.time('getAll')
         const notes = await noteRepo.getAllByUserId(userId, {
             sort,
             order,
@@ -128,11 +128,12 @@ export default {
             limit: limitNum,
             offset
         });
-
+        console.timeEnd('getAll')
+        console.time('getCount')
         const total = await noteRepo.getNotesCount(userId, {
             isPinned
         })
-
+        console.timeEnd('getCount')
         return createResponse({
             isOk: true,
             message: 'Lấy danh sách ghi chú thành công',
