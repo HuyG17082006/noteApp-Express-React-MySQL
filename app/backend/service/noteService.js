@@ -121,7 +121,7 @@ export default {
         const limitNum = parseInt(limit) || 10;
         const offset = (pageNum - 1) * limitNum;
         console.time('getAll')
-        const notes = await noteRepo.getAllByUserId(userId, {
+        const { result : notes, total} = await noteRepo.getAllByUserId(userId, {
             sort,
             order,
             isPinned,
@@ -129,11 +129,7 @@ export default {
             offset
         });
         console.timeEnd('getAll')
-        console.time('getCount')
-        const total = await noteRepo.getNotesCount(userId, {
-            isPinned
-        })
-        console.timeEnd('getCount')
+
         return createResponse({
             isOk: true,
             message: 'Lấy danh sách ghi chú thành công',
@@ -163,16 +159,12 @@ export default {
         const limitNum = parseInt(limit) || 10;
         const offset = (pageNum - 1) * limitNum;
 
-        const deletedNotes = await noteRepo.getAllDeletedNotesByUserId(userId, {
+        const {result : deletedNotes, total} = await noteRepo.getAllDeletedNotesByUserId(userId, {
             order,
             limit: limitNum,
             offset
         });
-
-        const total = await noteRepo.getNotesCount(userId, {
-            isDeleted: true
-        })
-
+        
         return createResponse({
             isOk: true,
             message: 'Lấy danh sách ghi chú thành công',

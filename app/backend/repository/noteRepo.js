@@ -11,7 +11,8 @@ export default {
         } = options;
 
         let query = `
-            SELECT id, title, isPinned, created_at, updated_at, updated_at, isDeleted
+            SELECT id, title, isPinned, created_at, updated_at, updated_at, isDeleted,
+            COUNT(*) OVER() AS total
             FROM notes
             WHERE userId = ? AND isDeleted = false
         `
@@ -30,7 +31,10 @@ export default {
 
         const [result] = await database.promise().execute(query, params)
 
-        return result;
+        return {
+            result,
+            total : result[0]?.total || 0
+        } 
     },
 
     getAllDeletedNotesByUserId: async (userId, options = {}) => {
@@ -41,7 +45,8 @@ export default {
         } = options;
 
         let query = `
-            SELECT id, title, isPinned, deleted_at, isDeleted
+            SELECT id, title, isPinned, deleted_at, isDeleted,
+            COUNT(*) OVER() AS total
             FROM notes
             WHERE userId = ? AND isDeleted = true
         `
@@ -54,7 +59,11 @@ export default {
         params.push(String(offset), String(limit + 1))
 
         const [result] = await database.promise().execute(query, params)
-        return result;
+        
+        return {
+            result,
+            total : result[0]?.total || 0
+        } 
     },
 
     getNotesCount: async (userId, options = {}) => {
