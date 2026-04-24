@@ -87,6 +87,11 @@ export default function NotePage() {
 				: 
 				await noteService.getAll(params);
 
+		if (!isOk) {
+			setNotes([]);
+			return;
+		}
+
 		const {
 			limit = params.limit,
 			page,
