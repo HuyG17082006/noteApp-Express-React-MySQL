@@ -28,11 +28,7 @@ export default {
         query += ` LIMIT ?, ?`;
         params.push(String(offset), String(limit + 1))
 
-        console.time('query')
-
         const [result] = await database.promise().execute(query, params)
-
-        console.timeEnd('query')
 
         return result;
     },
