@@ -8,6 +8,7 @@ const THREE_DAYS = 1000 * 60 * 60 * 24 * 3;
 
 export default {
     login: async (req, res) => {
+
         const { username = '', password = '' } = req.body || {};
 
         if (!username || !password)

@@ -11,14 +11,10 @@ const {
     logout
 } = authController;
 
-console.time('auth')
-
 authRouter.post('/login', login);
 authRouter.post('/register', register);
 authRouter.post('/refresh', refresh);
 authRouter.post('/logout', authMiddleware, logout);
-
-console.timeEnd('notes')
 
 export default authRouter;
 

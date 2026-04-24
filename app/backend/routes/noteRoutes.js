@@ -15,8 +15,6 @@ const {
     hardDeleteAll
 } = noteController;
 
-console.time('notes')
-
 noteRouter.get('/', getAll);
 noteRouter.get('/trash', getAllDeletedNotes);
 noteRouter.get('/:id', checkNote);
@@ -26,8 +24,6 @@ noteRouter.delete('/trash', hardDeleteAll);
 noteRouter.delete('/:id', moveNoteToTrash);
 noteRouter.delete('/:id/permanent', hardDelete);
 noteRouter.patch('/:id/restore', restoreNote);
-
-console.timeEnd('notes')
 
 export default noteRouter;
 
