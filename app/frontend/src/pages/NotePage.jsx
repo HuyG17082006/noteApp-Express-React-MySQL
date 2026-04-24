@@ -27,7 +27,7 @@ export default function NotePage() {
 
 	const { addNoti } = useContext(NotiContext);
 
-	const { logout } = useAuth();
+	const { logout } = useAuth({});
 
 	const hasFetched = useRef(false);
 
@@ -86,10 +86,6 @@ export default function NotePage() {
 				await noteService.getAllDeleted(params) 
 				: 
 				await noteService.getAll(params);
-
-		if (!isOk) {
-			window.location.reload()
-		}
 
 		const {
 			limit = params.limit,

@@ -11,6 +11,8 @@ import authStore from "../store/authStore.js";
 export default function useAuth({ setErrors = () => {}, setAuthDisplay = () => {}}) {
     const { addNoti } = useContext(NotiContext);
 
+    
+
     const navigate = useNavigate();
 
     const login = async (user) => {
