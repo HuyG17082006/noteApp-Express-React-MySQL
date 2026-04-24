@@ -65,7 +65,7 @@ export default {
 
         let query = `
             SELECT COUNT(*) as total 
-            FROM Notes 
+            FROM notes 
             WHERE userId = ?
         `
 
