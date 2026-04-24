@@ -20,8 +20,6 @@ export default function Pagination({ page, paginationCondition, handlePageChange
 		page === 1 ? page + 2 : page + 1)
 
 
-	console.log("pagination state: ", hasNext, hasPrev, totalPage)
-
 	const handlePage = (e, pageNumber) => {
 		if (e.target.tagName === 'BUTTON')
 			handlePageChange(pageNumber)

@@ -78,8 +78,6 @@ export default function Form({ handleShowForm, mode = 'add', noteDetail = null, 
         }));
     };
 
-    console.log(noteDetail)
-
     return (
         <div
             className='form-container'

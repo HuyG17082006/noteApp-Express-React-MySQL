@@ -20,7 +20,7 @@ export default function AuthPage() {
     const [showPassword, setShowPassword] = useState(false);
 
     const [errors, setErrors] = useState({});
-    console.log(setErrors)
+
     const {
         login,
         register

@@ -71,10 +71,6 @@ export default function NotePage() {
 
 	}, [])
 
-	useEffect(() => {
-		console.log('Notes: ', notes)
-	}, [notes])
-
 	const getList = async (params) => {
 
 		const { 

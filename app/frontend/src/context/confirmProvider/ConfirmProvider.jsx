@@ -25,8 +25,6 @@ export default function ConfirmProvider({ children }) {
         setShowConfirm(true)
     }
 
-    console.log(showConfirm)
-
     const handleClose = () => {
         setShowConfirm(false)
     }
