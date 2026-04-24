@@ -8,7 +8,7 @@ import { validateLogin, validateRegister } from '../validate/auth.validate.js'
 import authService from '../services/authService.js'
 import authStore from "../store/authStore.js";
 
-export default function useAuth({ setErrors = (f) => {}}) {
+export default function useAuth({ setErrors = (f) => {}, setAuthDisplay = (f) => {}}) {
     const { addNoti } = useContext(NotiContext);
 
     const navigate = useNavigate();

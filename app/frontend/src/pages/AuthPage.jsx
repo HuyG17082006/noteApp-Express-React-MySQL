@@ -24,7 +24,7 @@ export default function AuthPage() {
     const {
         login,
         register
-    } = useAuth({setErrors});
+    } = useAuth({setErrors, setAuthDisplay});
 
     const [user, setUser] = useState({
         username: '',
