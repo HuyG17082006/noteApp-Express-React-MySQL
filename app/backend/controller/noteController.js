@@ -6,13 +6,15 @@ export default {
     getAll: async (req, res) => {
         const userId = req.userId;
         const options = req.query;
-
+        console.time('getAll');
         const result = await noteService.getAll(userId, options);
-
+        console.timeEnd('getAll')
+        console.time('getAllRes');
         return sendRespone(res, {
             resStatus : result.isOk ? 200 : 400,
             ...result
         })
+        console.timeEnd('getAllRes');
     },
 
     getAllDeletedNotes : async (req, res) => {
