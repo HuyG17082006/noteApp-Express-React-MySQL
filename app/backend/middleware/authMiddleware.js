@@ -4,8 +4,6 @@ export default function authMiddleware(req, res, next) {
     const authHeader = req.headers.authorization;
     const token = authHeader ? authHeader.split(' ')[1] : null;
 
-    console.time('middleWare')
-
     if (!token) {
         return res.status(401).json({
             message : "Không có token"
@@ -22,8 +20,6 @@ export default function authMiddleware(req, res, next) {
             isAccessTokenExpired : true
         })
     }
-
-    console.timeEnd('middleWare')
 
     req.userId = data.userId;
 

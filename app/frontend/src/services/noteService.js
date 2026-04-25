@@ -5,10 +5,12 @@ const BASE_NOTES_API = '/notes'
 export default {
     getAll: async (queryParams) => {
         const queryString = new URLSearchParams(queryParams).toString();
-
-        return await Fetch(`${BASE_NOTES_API}?${queryString}`, {
+        console.time('getAll')
+        const res = await Fetch(`${BASE_NOTES_API}?${queryString}`, {
             method: 'GET'
         });
+        console.timeEnd('getAll')
+        return res;
     },
 
     getAllDeleted: async (queryParams) => {
