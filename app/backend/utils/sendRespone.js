@@ -1,8 +1,17 @@
-export default (res, { resStatus = 200, message = '', data = null, ...another } = {}) => {
+export default (res, {
+    resStatus = 200,
+    message = '',
+    data,
+    ...rest
+} = {}) => {
 
-    return res.status(resStatus).json({ 
-        message, 
-        ...(data && {data}), 
-        ...another 
-    })   
-}
+    const payload = { message };
+
+    if (data !== undefined && data !== null) {
+        payload.data = data;
+    }
+
+    Object.assign(payload, rest);
+
+    return res.status(resStatus).json(payload);
+};
